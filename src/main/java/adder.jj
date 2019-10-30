@@ -1,0 +1,41 @@
+options {
+    STATIC = false;
+}
+PARSER_BEGIN(Adder)
+public class Adder {
+    public static void main(String[] argv) throws ParseException, TokenMgrError {
+        Adder parser = new Adder(System.in);
+        parser.Start();
+    }
+}
+PARSER_END(Adder)
+SKIP : { " " }
+SKIP : { "\n" | "  \n" | "\r" | " \r" | "\r\n" | " \r\n"}
+TOKEN : { < EOL : "\n" | "  \n" | "\r" | " \r" | "\r\n" | " \r\n" > }
+TOKEN : { < SIGN : "+" | "-"> }
+TOKEN : { < NUMBER : (["0"-"9"])+ > }
+int Start() throws NumberFormatException :
+{
+    Token numberToken;
+    Token signToken;
+    int i;
+    int value;
+} {
+    numberToken = <NUMBER>
+    {i = Integer.parseInt(numberToken.image);}
+    {value = i;}
+    (
+        signToken = <SIGN>
+        numberToken = <NUMBER>
+        {i  = Integer.parseInt(numberToken.image);}
+        {
+            if("+".equals(signToken.image)) {
+                value += i;
+            } else if("-".equals(signToken.image)) {
+                value -= i;
+            }
+        }
+    )*
+    ( <EOL> | <EOF> )
+    {return value;}
+}

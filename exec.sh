@@ -1,0 +1,1 @@
+~/Downloads/javacc-5.0/bin/javacc ~/IdeaProjects/DBEngine/src/main/java/adder/adder.jj
